@@ -1,0 +1,13 @@
+* = primary key
+
+UNF		lab(persNo, name, DoB, labCode, labName, (resCode, resDesc, resSup))
+1NF		lab(*persNo, name, DoB, labCode, labName)
+			research(*persNo, resCode, resDesc, resSup)
+2NF		personel(*persNo, name, DoB, labCode)
+			lab(*labCode, labName)
+			research_personel(*persNo, resCode)
+			research(*resCode, resDesc, resSup)
+3NF		personel(*persNo, name, DoB, labCode)
+			lab(*labCode, labName)
+			research_personel(*persNo, resCode)
+			research(*resCode, resDesc, resSup)
