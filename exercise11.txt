@@ -1,0 +1,21 @@
+**SETUP**
+
+$ mongoimport --db exercise11 bioinf_mongo_examen.json
+
+/////////////////////////////////////////////////////////////
+
+*Give the number of medicine taken with a lozenge.
+244 (=> bekomen door zelfde query uit te voeren + .length() )
+db.bioinf_mongo_examen.find({method_of_admission: {$in: [/TABLET/,/BUCCAL/,/SUBLINGUAL/]}},{_id:0, drug:1})
+
+*Give the number of medicines that have side effects in more than 12% of the cases.
+db.bioinf_mongo_examen.find({percentage_of_side_effects: {$gt: 12}}).length()
+
+*Give the names of the companies that produce medicines that on average cause side effects i more than 10% of cases.
+-Galderma Laboratories, L.P.
+-Watson Pharmaceuticals, Inc.
+-Durata Therapeutics, Inc.
+db.bioinf_mongo_examen.aggregate([{$group: {_id: "$company", average: {$avg: "$percentage_of_side_effects"}}},{$match: {average: {$gt: 10}}},{$sort: {average:-1}}])
+
+*Specify the lower and upper limits of the percentage of side effects of medicin within companies that produce more than 1 drug
+db.bioinf_mongo_examen.aggregate([{$group: {_id: "$company", numberofdrugs: {$sum:1}, lower_limit: {$min: "$percentage_of_side_effects"}, upper_limit: {$max: "$percentage_of_side_effects"}}},{$match: {numberofdrugs: {$gt: 1}}}])
