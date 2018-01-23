@@ -1,0 +1,23 @@
+AS ROOT:
+CREATE DATABASE bioinf_exam;
+GRANT all ON bioninf_exam.* TO 'guest'@'localhost';
+
+TERMINAL:
+$ mysql bioinf_exam < bioinf_exam.sql
+
+Give the name and length of the smallest gene in the genome:
+TMPRSS3	5379014
+SELECT gene_name, (seq_region_end-seq_region_start+1) AS length FROM gene ORDER BY length desc LIMIT 1;
+
+What is the name of the gene with the most transcripts? What is the number of transcripts of this gene?
+U6			1329
+SELECT gene_name, count(*) FROM gene JOIN transcript ON gene.gene_id=transcript.gene_id GROUP BY gene_name ORDER BY count(*) desc LIMIT 1;
+
+Give the name of the chromosome with the second most genes that tell something about cancer. 
+chromosome 9
+SELECT chromosome FROM gene WHERE description LIKE '%cancer%' GROUP BY chromosome ORDER BY count(*) desc LIMIT 1 OFFSET 1;
+
+What is the number of exons of this chromosome?
+
+Number of rows exon table: 642590					SELECT count(*) FROM exon;
+Number of rows exon_transcript table: 1178393	SELECT count(*) FROM exon_transcript
