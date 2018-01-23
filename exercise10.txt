@@ -1,3 +1,5 @@
+**SETUP**
+
 AS ROOT:
 CREATE DATABASE bioinf_exam;
 GRANT all ON bioninf_exam.* TO 'guest'@'localhost';
@@ -5,19 +7,26 @@ GRANT all ON bioninf_exam.* TO 'guest'@'localhost';
 TERMINAL:
 $ mysql bioinf_exam < bioinf_exam.sql
 
-Give the name and length of the smallest gene in the genome:
-TMPRSS3	5379014
-SELECT gene_name, (seq_region_end-seq_region_start+1) AS length FROM gene ORDER BY length desc LIMIT 1;
+////////////////////////////////////////////////////////////////////////
 
-What is the name of the gene with the most transcripts? What is the number of transcripts of this gene?
+*Give the name and length of the smallest gene in the genome:
+TRDD1		8
+SELECT gene_name, (seq_region_end-seq_region_start+1) AS length FROM gene ORDER BY length asc LIMIT 1;
+
+*What is the name of the gene with the most transcripts? What is the number of transcripts of this gene?
 U6			1329
 SELECT gene_name, count(*) FROM gene JOIN transcript ON gene.gene_id=transcript.gene_id GROUP BY gene_name ORDER BY count(*) desc LIMIT 1;
 
-Give the name of the chromosome with the second most genes that tell something about cancer. 
+*Give the name of the chromosome with the second most genes that tell something about cancer. 
 chromosome 9
 SELECT chromosome FROM gene WHERE description LIKE '%cancer%' GROUP BY chromosome ORDER BY count(*) desc LIMIT 1 OFFSET 1;
 
-What is the number of exons of this chromosome?
+*What is the number of exons of this chromosome?
+45679
+SELECT count(et.exon_id) FROM gene AS g JOIN transcript AS t ON g.gene_id=t.gene_id JOIN exon_transcript AS et ON t.transcript_id=et.transcript_id WHERE g.chromosome = 9;
+
 
 Number of rows exon table: 642590					SELECT count(*) FROM exon;
 Number of rows exon_transcript table: 1178393	SELECT count(*) FROM exon_transcript
+-> 1 exon kan meerdere transcripten bevatten en omgekeerd. Exon-transcript is een cross-reference tabel, want 
+		exon en transcript hebben een many-to-many relation.
