@@ -11,3 +11,4 @@ UNF		lab(persNo, name, DoB, labCode, labName, (resCode, resDesc, resSup))
 			lab(*labCode, labName)
 			research_personel(*persNo, resCode)
 			research(*resCode, resDesc, resSup)
+
